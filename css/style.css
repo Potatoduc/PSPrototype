@@ -89,3 +89,12 @@ body{
 	font-size: 16px;
 	padding: 16px 32px;
 }
+.comsec{
+	margin-top:3%;
+	margin-left:-6%;
+}
+.vl {
+  border-left: 2px solid red;
+  margin-top:5%;
+  height: 400px;
+}

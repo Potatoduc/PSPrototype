@@ -1,10 +1,45 @@
+<?php
+	date_default_timezone_set('Asia/Manila');
+?>
+<br>
+
+<?php
+    $conn = new mysqli('localhost', 'root', '', 'ratingSystem');
+
+    if (isset($_POST['save'])) {
+        $uID = $conn->real_escape_string($_POST['uID']);
+        $ratedIndex = $conn->real_escape_string($_POST['ratedIndex']);
+        $ratedIndex++;
+
+        if (!$uID) {
+            $conn->query("INSERT INTO stars (rateIndex) VALUES ('$ratedIndex')");
+            $sql = $conn->query("SELECT id FROM stars ORDER BY id DESC LIMIT 1");
+            $uData = $sql->fetch_assoc();
+            $uID = $uData['id'];
+        } else
+            $conn->query("UPDATE stars SET rateIndex='$ratedIndex' WHERE id='$uID'");
+
+        exit(json_encode(array('id' => $uID)));
+    }
+
+    $sql = $conn->query("SELECT id FROM stars");
+    $numR = $sql->num_rows;
+
+    $sql = $conn->query("SELECT SUM(rateIndex) AS total FROM stars");
+    $rData = $sql->fetch_array();
+    $total = $rData['total'];
+
+    $avg = $total / $numR;
+?>
 <!doctype html>
 <head>
 	<title>PROTOTYPE</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet"  type="text/css" href="css/style.css">
+		<!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		 -->
+		 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 		
 		<script src="js/jquery-slim.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
@@ -55,11 +90,21 @@
 						</j></p>
 						<h5>AVERAGE COST</h5>
 						<p>$1000-$2000</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star"></span>
-						<span class="fa fa-star"></span>
+						<div align="left" style="background:; width:23.5%; padding:10px; color:white; border:2px solid #4CAF50;">
+							<i class="fa fa-star" data-index="0"></i>
+							<i class="fa fa-star" data-index="1"></i>
+							<i class="fa fa-star" data-index="2"></i>
+							<i class="fa fa-star" data-index="3"></i>
+							<i class="fa fa-star" data-index="4"></i>
+							<?php echo round($avg,2) ?>
+						</div>
+						<?php
+							echo "<form>
+									<input type='hidden' name='uid' value='Anonymous'>
+									<input type='hidden' name='date' value='".date('Y-m-d H:i:s')."'>
+									<textarea name='message'> </textarea><br>
+									<button type='submit' name='submit'>Comment</button>
+								   </form>";?>
 					</div>
 				</div>
 			</div>
@@ -76,11 +121,21 @@
 							</j></p>
 							<h5>AVERAGE COST</h5>
 						<p>$1000-$2000</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star"></span>
-						<span class="fa fa-star"></span>
+						<div align="left" style="background:; width:23.5%; padding:10px; color:white; border:2px solid #4CAF50;">
+							<i class="fa fa-star" data-index="5"></i>
+							<i class="fa fa-star" data-index="6"></i>
+							<i class="fa fa-star" data-index="7"></i>
+							<i class="fa fa-star" data-index="8"></i>
+							<i class="fa fa-star" data-index="9"></i>
+							<?php echo round($avg,2) ?>
+						</div>
+						<?php
+							echo "<form>
+									<input type='hidden' name='uid' value='Anonymous'>
+									<input type='hidden' name='date' value='".date('Y-m-d H:i:s')."'>
+									<textarea name='message'> </textarea><br>
+									<button type='submit' name='submit'>Comment</button>
+								   </form>";?>
 					</div>
 				</div>
 			</div>
@@ -97,11 +152,21 @@
 						</j></p>
 						<h5>AVERAGE COST</h5>
 						<p>$1000-$2000</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star"></span>
-						<span class="fa fa-star"></span>
+						<div align="left" style="background:; width:23.5%; padding:10px; color:white; border:2px solid #4CAF50;">
+							<i class="fa fa-star" data-index="10"></i>
+							<i class="fa fa-star" data-index="11"></i>
+							<i class="fa fa-star" data-index="12"></i>
+							<i class="fa fa-star" data-index="13"></i>
+							<i class="fa fa-star" data-index="14"></i>
+							<?php echo round($avg,2) ?>
+						</div>
+						<?php
+							echo "<form>
+									<input type='hidden' name='uid' value='Anonymous'>
+									<input type='hidden' name='date' value='".date('Y-m-d H:i:s')."'>
+									<textarea name='message'> </textarea><br>
+									<button type='submit' name='submit'>Comment</button>
+								   </form>";?>
 					</div>
 				</div>
 			</div>
@@ -117,16 +182,81 @@
 							diplomat hotel asdasd asdasdasd asd asdasdasd asdasd asdasdasda asdasda
 						</j></p>
 						<h5>AVERAGE COST</h5>
-						<p>$1000-$2000</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star"></span>
-						<span class="fa fa-star"></span>
+						<div align="left" style="background:; width:23.5%; padding:10px; color:white; border:2px solid #4CAF50;">
+							<i class="fa fa-star" data-index="15"></i>
+							<i class="fa fa-star" data-index="16"></i>
+							<i class="fa fa-star" data-index="17"></i>
+							<i class="fa fa-star" data-index="18"></i>
+							<i class="fa fa-star" data-index="19"></i>
+							<?php echo round($avg,2) ?>
+						</div>
+						<?php
+							echo "<form>
+									<input type='hidden' name='uid' value='Anonymous'>
+									<input type='hidden' name='date' value='".date('Y-m-d H:i:s')."'>
+									<textarea name='message'> </textarea><br>
+									<button type='submit' name='submit'>Comment</button>
+								   </form>";?>
 					</div>
 				</div>
 			</div>
 		</div>
+<script>
+        var ratedIndex = -1, uID = 0;
+
+        $(document).ready(function () {
+            resetStarColors();
+
+            if (localStorage.getItem('ratedIndex') != null) {
+                setStars(parseInt(localStorage.getItem('ratedIndex')));
+                uID = localStorage.getItem('uID');
+            }
+
+            $('.fa-star').on('click', function () {
+               ratedIndex = parseInt($(this).data('index'));
+               localStorage.setItem('ratedIndex', ratedIndex);
+               saveToTheDB();
+            });
+
+            $('.fa-star').mouseover(function () {
+                resetStarColors();
+                var currentIndex = parseInt($(this).data('index'));
+                setStars(currentIndex);
+            });
+
+            $('.fa-star').mouseleave(function () {
+                resetStarColors();
+
+                if (ratedIndex != -1)
+                    setStars(ratedIndex);
+            });
+        });
+
+        function saveToTheDB() {
+            $.ajax({
+               url: "index.php",
+               method: "POST",
+               dataType: 'json',
+               data: {
+                   save: 1,
+                   uID: uID,
+                   ratedIndex: ratedIndex
+               }, success: function (r) {
+                    uID = r.id;
+                    localStorage.setItem('uID', uID);
+               }
+            });
+        }
+
+        function setStars(max) {
+            for (var i=0; i <= max; i++)
+                $('.fa-star:eq('+i+')').css('color', 'yellow');
+        }
+
+        function resetStarColors() {
+            $('.fa-star').css('color', 'grey');
+        }
+    </script>
 		
 		<br>
 		<br>		
